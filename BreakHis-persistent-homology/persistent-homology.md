@@ -87,7 +87,7 @@ for i, pd_diagram in enumerate(tqdm(pds, desc="Generating persistence images")):
 
 ```
 
-![Example image](assets/images/Screenshot%202025-11-22%20160454.png)
+![Example image](assets/images/Screenshot%2025-11-22%161113.png)
 
 
 # References
