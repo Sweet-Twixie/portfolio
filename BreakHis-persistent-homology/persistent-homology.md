@@ -42,7 +42,7 @@ for pc in tqdm(X_gray, desc="Computing persistence diagrams"):
 
 ```
 
-![Example image](BreakHis-persistent-homology/assets/images/Screenshot%202025-11-22%20160454.png)
+![Example image](assets/images/Screenshot%202025-11-22%20160454.png)
 
 ---
 
