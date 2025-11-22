@@ -47,6 +47,9 @@ Persistent homology (PH) requires scalar-valued inputs. Because H&E-stained tiss
 
 - Extracted the red channel from every image.
 - Used it as the grayscale representation for PH computations.
+
+![Example of stain normalisation at 40× magnification.](assets/images/Screenshot%202025-11-22%20112643.png)
+
 ---
 
 ## **Final Output**
