@@ -46,5 +46,5 @@ Further improvements could arise from tuning PI hyperparameters (resolution, ker
 
 
 # 🔗 Repository
-[View the code on GitHub]([https://github.com/Sweet-Twixie/football-classification](https://github.com/Sweet-Twixie/Spectral-Sequences-and-Topological-Data-Analysis-for-Image-Processing))
+[View the code on GitHub](https://github.com/Sweet-Twixie/Spectral-Sequences-and-Topological-Data-Analysis-for-Image-Processing)
 
