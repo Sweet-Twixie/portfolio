@@ -10,11 +10,15 @@ melanoma subtype classification from dermatoscopic images [4]. These application
 
 Beyond histopathology, persistent homology has been incorporated into radiomics workflows for medical imaging modalities such as MRI and CT. For instance, persistent homology-based features have been utilized for the classification of liver tumors [11, 9], prognosis prediction in lung cancer using CT imaging [13, 7], and breast lesion detection in mammograms [3, 5, 15]. In these settings, topological features have been shown to complement standard radiomic descriptors, improving the discrimination of tumor types and patient outcomes.
 
+Persistence diagrams provide a compact summary of the topological features present in an image across multiple intensity scales. Each point in a diagram represents the birth and death of a topological structure—such as connected components (H₀) or loops (H₁)—as the image is filtered. Importantly, persistence diagrams are **stable**: small perturbations or noise in the input image lead to only small changes in the diagram. This stability makes them reliable descriptors for downstream machine-learning tasks, enabling robust classification based on underlying tissue morphology.
+
 ---
 
 # Persistent Cubical Homology on images
 
 Persistent homology on images is typically computed using **cubical homology**, which is well-suited for data structured on a regular pixel grid. In this project, persistent homology was extracted from the grayscale (red-channel) images using **Cripser**, a fast and memory-efficient library for computing cubical complexes. Cripser operated directly on the preprocessed intensity values, producing persistence diagrams that capture the multiscale topological structure of the tissue images.
+
+The code block below demonstrates how persistence diagrams are extracted from the grayscale images using **Cripser**, followed by filtering to remove points with infinite death time. These filtered diagrams serve as the foundation for subsequent vectorisation steps used in machine-learning classification.
 
 
 ```python
@@ -36,7 +40,7 @@ for pc in tqdm(X_gray, desc="Computing persistence diagrams"):
 
     pds.append(pd_diagram_filtered)
 
-...
+```
 
 ---
 
