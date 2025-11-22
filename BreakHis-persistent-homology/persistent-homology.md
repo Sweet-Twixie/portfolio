@@ -24,6 +24,8 @@ The code block below demonstrates how persistence diagrams are extracted from th
 ```python
 # Extracting Persistence Diagrams from the images
 
+import cripser
+
 pds = []
 for pc in tqdm(X_gray, desc="Computing persistence diagrams"):
     # compute persistence
@@ -46,60 +48,47 @@ for pc in tqdm(X_gray, desc="Computing persistence diagrams"):
 
 ---
 
-## 🔹 General Category Selection
-To classify players into **Defender, Midfielder, Forwarder**, three complementary feature selection methods were applied:
+# Vectorisation of Persistence Diaagrams
 
-1. **Random Forest Feature Importance** → Ranked features by importance.  
-2. **Recursive Feature Elimination (RFE)** → Iteratively removed least important features until the optimal subset was found.  
-3. **Gradient Boosting Feature Importance** → Validated feature relevance through boosting models.  
+The issue is that persistence barcodes are not in an immediately algorithm-friendly form, despite capturing rich topological information. Many machine learning algorithms are relying on vectorized database to handle large dataset and allow fast computation. Vectorized dataset allow us to apply the law of large numbers or central-limit theorem, hypothesis testing, direct comparison using linear algebra and many more. 
 
-### ✅ Final Selected Features (for general classification)
-After comparing the results, I finalized a set of **10 features** that consistently showed strong predictive power:
+The Persistence Image (PI) approach was introduced by Henry Adams et al [1]. In this method, the authors convert a persistence diagram (PD) into a finite-dimensional vector representation, which they termed a persistence image.
 
-- `attacking_heading_accuracy_standardized`  
-- `attacking_short_passing_standardized`  
-- `skill_long_passing_standardized`  
-- `power_strength_standardized`  
-- `defending_average`  
-- `defending_category_encoded`  
-- `shooting_standardize`  
-- `mentality_interceptions_categories_encoded`  
-- `dribbling_standardize`  
-- `mentality_positioning_categories_encoded`  
+The code block below demonstrates vectorisation of the persistence diagrams into persistence images using **persim** library. 
 
-These features represent a balanced mix of **attacking, defending, physical, and mentality skills**, making them highly informative for separating Defenders, Midfielders, and Forwarders.
 
----
-
-## 🔹 Category-Specific Feature Selection
-In addition to general classification, I performed **feature selection separately for each category** (**Defender, Midfielder, Forwarder**) because each role requires different skill sets.  
-
-For each subset, I applied **Random Forest Feature Importance** to select the **top 10 most relevant features** that best predict the specific positions within that category.
-
-### Example: Forwarder Feature Selection
 ```python
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import LabelEncoder
-import pandas as pd
 
-X_forwarder = df_forwarder.drop(['ST', 'LW', 'RW', 'CF', 'LWB', 'RWB'], axis=1)
-y_forwarder = df_forwarder[['ST', 'LW', 'RW', 'CF', 'LWB', 'RWB']]
+# Vectorising PDs into Persistence Images using PersistenceImager function from persim library
 
-y_forwarder_encoded = LabelEncoder().fit_transform(y_forwarder.values.argmax(axis=1))
+import persim
+from persim import plot_diagrams, PersistenceImager
+from tqdm import tqdm
 
-X_train, X_test, y_train, y_test = train_test_split(X_forwarder, y_forwarder_encoded,
-                                                    test_size=0.2, random_state=42)
+persistent_images_h0 = []  # dimension 0, i.e. connected components
+persistent_images_h1 = []  # dimension 1, i.e. loops and holes
 
-rf_model = RandomForestClassifier(n_estimators=100, random_state=42)
-rf_model.fit(X_train, y_train)
+for i, pd_diagram in enumerate(tqdm(pds, desc="Generating persistence images")):
+    try:
+        pimgr = PersistenceImager(pixel_size=0.01)
+        pimgr.kernel_params = {'sigma': 0.001}
 
-rf_feature_importance = pd.Series(rf_model.feature_importances_, index=X_train.columns)
-rf_selected_features = rf_feature_importance.sort_values(ascending=False).head(10)
+        # --- H0 ---
+        pimgr.fit(pd_diagram[0])
+        img0 = pimgr.transform(pd_diagram[0])
 
-print("Random Forest Selected Features:\n", rf_selected_features)
+        # --- H1 ---
+        pimgr.fit(pd_diagram[1])
+        img1 = pimgr.transform(pd_diagram[1])
+
+        # Append to resective arrays
+        persistent_images_h0.append(img0)
+        persistent_images_h1.append(img1)
 
 ```
+
+![Example image](assets/images/Screenshot%202025-11-22%20160454.png)
+
 
 # References
 
