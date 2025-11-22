@@ -50,6 +50,8 @@ for pc in tqdm(X_gray, desc="Computing persistence diagrams"):
 
 # Vectorisation of Persistence Diaagrams
 
+## Persistence Images 
+
 The issue is that persistence barcodes are not in an immediately algorithm-friendly form, despite capturing rich topological information. Many machine learning algorithms are relying on vectorized database to handle large dataset and allow fast computation. Vectorized dataset allow us to apply the law of large numbers or central-limit theorem, hypothesis testing, direct comparison using linear algebra and many more. 
 
 The Persistence Image (PI) approach was introduced by Henry Adams et al [1]. In this method, the authors convert a persistence diagram (PD) into a finite-dimensional vector representation, which they termed a persistence image.
@@ -89,6 +91,31 @@ for i, pd_diagram in enumerate(tqdm(pds, desc="Generating persistence images")):
 
 ![Example image](assets/images/Screenshot%202025-11-22%20161113.png)
 
+## Persistence Statistics
+
+Persistence statistics is nother vectorisation method of a persistence diagram. It provides a simple yet effective way to convert persistence diagrams into fixed-length feature vectors for machine-learning models. Instead of using the full diagram structure, this method derives summary descriptors such as the number of features, total persistence, maximum lifespan, mean birth/death values, and spread of the topology across the filtration. These statistics offer an interpretable representation of the underlying topological signal while remaining computationally lightweight, making them a strong baseline for classification tasks alongside more expressive methods like persistence images.
+
+```python
+
+pd = pd_diagram_filtered[dim]
+birth_times = pd[:, 0].astype(float)
+death_times = pd[:, 1].astype(float)
+            
+persistence_lengths = death_times - birth_times
+num_features = len(persistence_lengths)
+
+ratios = []
+    for b, d in zip(birth_times, death_times):
+        if b != 0.0:
+            ratios.append(d / b)
+        # else: skip
+
+        # length stats
+        mean_persistence = np.mean(persistence_lengths) if num_features > 0 else 0.0
+        max_persistence  = np.max(persistence_lengths)  if num_features > 0 else 0.0
+        std_persistence  = np.std(persistence_lengths)  if num_features > 0 else 0.0
+
+```
 
 # References
 
