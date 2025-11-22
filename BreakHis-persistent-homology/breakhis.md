@@ -20,7 +20,8 @@ Steps:
 2. Applied **Macenko**  normalization to all images.
 3. Produced a dataset with consistent stain intensity and structure.
 
-![Example of stain normalisation at 40× magnification. Left: original image; right: normalised image produced with staintools (Macenko method](BreakHis-persistent-homology/assets/images/Screenshot 2025-11-22 104316.png)
+![Example of stain normalisation at 40× magnification. Left: original image; right: normalised image produced with StainTools (Macenko method)](BreakHis-persistent-homology/assets/images/Screenshot%202025-11-22%20104316.png)
+
 
 This step ensures that topological features are not impacted by stain inconsistencies.
 
