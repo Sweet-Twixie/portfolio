@@ -10,6 +10,7 @@ The **BreakHis** (Breast Cancer Histopathological Image) dataset is a publicly a
 
 Images were captured using optical microscopy at **40×, 100×, 200×, and 400× magnifications**, offering multiscale structural information. Each image is **700×460 pixels (JPEG)** and reflects natural variability in staining, colour, and texture—making BreakHis a realistic and challenging benchmark for medical-image analysis and topological data analysis (TDA).
 
+---
 
 ## **Stain Normalization (StainTools)**
 Histopathology images often differ in stain appearance due to lab conditions and scanner variability.  
@@ -39,6 +40,7 @@ Augmentations included:
 
 All transformations were kept mild to preserve tissue morphology, and no augmentation was applied to the test set to prevent data leakage. This resulted in a more balanced training distribution while retaining the original class proportions for evaluation.
 
+---
 
 ## **Conversion to Grayscale (Red Channel Extraction)**
 Persistent homology (PH) requires scalar-valued inputs. Because H&E-stained tissue images have the strongest structural contrast in the **red channel**, the red channel was extracted from each RGB image.
